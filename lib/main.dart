@@ -180,6 +180,50 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
+            ElevatedButton(
+                onPressed: () {
+                  AwesomeNotifications()
+                      .isNotificationAllowed()
+                      .then((isAllowed) {
+                    if (!isAllowed) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog.adaptive(
+                          title: const Text('Allow Notifications'),
+                          content: const Text(
+                              'Our app would like to send you notifications'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text(
+                                'Don\'t Allow',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                            TextButton(
+                                onPressed: () => AwesomeNotifications()
+                                    .requestPermissionToSendNotifications()
+                                    .then((_) => Navigator.pop(context)),
+                                child: const Text(
+                                  'Allow',
+                                  style: TextStyle(
+                                    color: Colors.teal,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ))
+                          ],
+                        ),
+                      );
+                    }
+                  });
+                },
+                child: Text("Request permission"))
           ],
         ),
       ),
